@@ -1,0 +1,29 @@
+{
+  "name": "seo-basic",
+  "version": "0.1.0",
+  "description": "Basic of SEO",
+  "main": "index.js",
+  "scripts": {
+    "start": "node seo-basic.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SemteulGaram/seo-basic.git"
+  },
+  "author": "SemteulGaram",
+  "license": "UNLICENSED",
+  "bugs": {
+    "url": "https://github.com/SemteulGaram/seo-basic/issues"
+  },
+  "homepage": "https://github.com/SemteulGaram/seo-basic#readme",
+  "dependencies": {
+    "cheerio": "^1.0.0-rc.3",
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-logger": "^3.2.1",
+    "koa-router": "^8.0.6",
+    "koa-static": "^5.0.0",
+    "request": "^2.88.0",
+    "request-promise-native": "^1.0.8"
+  }
+}

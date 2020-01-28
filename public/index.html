@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset='utf-8' />
+    <title>SEO-Basic</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+
+      background-color: #171717;
+      color: #FFFFFF;
+
+      transition: all .5s;
+    }
+
+    body.body--fail {
+      background-color: #771717;
+    }
+
+    .request {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      min-height: 100vh;
+      padding: 1rem;
+
+      text-align: center;
+    }
+
+    .request__title {
+      font-size: 2rem;
+    }
+
+    .form__url {
+      width: 14rem;
+
+      background-color: transparent;
+      border: none;
+      border-bottom: solid 2px white;
+
+      color: white;
+    }
+
+    .request--hide {
+      display: none;
+    }
+
+    .result {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      min-height: 100vh;
+    }
+
+    .result--hide {
+      display: none;
+    }
+
+    .result__list {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      max-width: 95%;
+    }
+
+    .section__checkbox {
+      position: relative;
+      top: -.7em;
+      width: 5em;
+      margin: 0 1em 0 0;
+
+      font-size: .7rem;
+    }
+    .section__checkbox::before {
+      content: '';
+      position: absolute;
+      width: 5em;
+      height: 2.5em;
+      background-color: #333333;
+      border-radius: 2.5em;
+      transition: all .25s;
+    }
+    .section__checkbox:checked::before {
+      background-color: #00a1ff;
+    }
+    .section__checkbox::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      width: 2.5em;
+      height: 2.5em;
+      background-color: #ffffff;
+      border-radius: 2.5em;
+      transition: all .25s;
+      border: .2em solid #333333;
+      box-sizing: border-box
+    }
+    .section__checkbox:checked::after {
+      left: 2.5em;
+      border: .2em solid #00a1ff;
+    }
+
+    .section__title {
+      display: inline-block;
+      padding-top: .3em;
+
+      font-size: 1.5rem;
+    }
+
+    .section__detail {
+      display: block;
+      padding: .5rem 0;
+    }
+
+    .popup {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100vw;
+      height: 100vh;
+
+      font-size: 1.5rem;
+      text-align: center;
+    }
+
+    .popup--hide {
+      display: none;
+    }
+    </style>
+    <script>
+    const qs = document.querySelector.bind(document)
+    const ce = document.createElement.bind(document)
+
+    function removeAllChildren (element) {
+      while (element.firstChild) element.removeChild(element.firstChild)
+    }
+
+    function changeTextNode (element, text) {
+      removeAllChildren(element)
+      element.appendChild(document.createTextNode(text))
+    }
+
+    function sectionCreator (id, title, success, detail) {
+      const root = ce('div')
+      root.classList.add('section')
+      root.classList.add('section_' + id.toLowerCase())
+      root.innerHTML = `<input class='section__checkbox' type='checkbox' ${ success ? 'checked ' : ''}></input>
+      <span class='section__title'>${ title }</span>
+      <span class='section__detail'>${ detail }</span>`
+      return root
+    }
+
+    function buildResult (result) {
+      /*result = {
+        robots: {},
+        sitemap: {},
+        jsonLd: {},
+        title: {},
+        meta: {},
+        imgAlt: {},
+        mobile: {},
+        ssr: {},
+        https: {},
+        googleSearch: {},
+        naverSearch: {}
+      }*/
+      qs('.result__list').appendChild(sectionCreator('robots', 'robots.txt', result.robots.success, result.robots.success
+        ? 'robots.txt 파일이 정상적으로 존재합니다'
+        : 'robots.txt 파일 누락'))
+
+      qs('.result__list').appendChild(sectionCreator('sitemap', 'sitemap.xml', result.sitemap.success, result.sitemap.success
+        ? 'sitemap.xml 파일이 정상적으로 존재합니다'
+        : 'sitemap.xml 파일 누락'))
+
+      qs('.result__list').appendChild(sectionCreator('jsonLd', 'JSON-LD', result.jsonLd.success, result.jsonLd.success
+        ? 'JSON-LD 태그가 정상적으로 존재합니다'
+        : 'JSON-LD 태그 누락'))
+
+      qs('.result__list').appendChild(sectionCreator('title', 'title 태그', result.title.success, result.title.success
+        ? 'title 태그가 유효합니다'
+        : 'title 태그 누락'))
+
+      qs('.result__list').appendChild(sectionCreator('meta', 'meta 태그', result.meta.success, result.meta.success
+        ? 'charset 설정되어 있습니다 (세부 내용 추가 바람)'
+        : 'charset 설정 누락'))
+
+      qs('.result__list').appendChild(sectionCreator('imgAlt', 'img 태그 alt 설명문', result.imgAlt.success, result.imgAlt.success
+        ? '모든 img 태그에 alt가 작성되어 있습니다'
+        : 'alt 태그 누락된 img 태그 존재 (세부 내용 추가 바람)'))
+
+      qs('.result__list').appendChild(sectionCreator('mobile', 'mobile 지원', result.mobile.success, result.mobile.success
+        ? '자동 검사 미지원'
+        : '자동 검사 미지원'))
+
+      qs('.result__list').appendChild(sectionCreator('ssr', 'Server Side Rendering', result.ssr.success, result.ssr.success
+        ? '자동 검사 미지원'
+        : '자동 검사 미지원'))
+
+      qs('.result__list').appendChild(sectionCreator('https', 'https 지원', result.https.success, result.https.success
+        ? '사이트가 https를 지원합니다'
+        : '사이트가 https를 지원하지 않습니다'))
+
+      qs('.result__list').appendChild(sectionCreator('googleSearch', 'Google search console', result.googleSearch.success, result.googleSearch.success
+        ? '자동 검사 미지원 <a href="https://search.google.com/search-console/">https://search.google.com/search-console/</a>'
+        : '자동 검사 미지원 <a href="https://search.google.com/search-console/">https://search.google.com/search-console/</a>'))
+
+      qs('.result__list').appendChild(sectionCreator('naverSearch', 'Naver search advisor', result.naverSearch.success, result.naverSearch.success
+        ? '자동 검사 미지원 <a href="https://searchadvisor.naver.com/console/wmt/board">https://searchadvisor.naver.com/console/wmt/board</a>'
+        : '자동 검사 미지원 <a href="https://searchadvisor.naver.com/console/wmt/board">https://searchadvisor.naver.com/console/wmt/board</a>'))
+    }
+
+    function formSubmit () {
+      console.log('submit')
+
+      const xhr = new XMLHttpRequest()
+      xhr.open('post', '/api/seoRequest', true)
+      xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded')
+      xhr.send('url=' + encodeURIComponent(document.querySelector('.form__url').value))
+
+      xhr.onreadystatechange = function () {
+        if(xhr.readyState !== 4) return;
+      	// readyState 4: 완료
+
+      	if(xhr.status === 200) {
+          // status 200: 성공
+          const data = JSON.parse(xhr.responseText)
+          if (data.success) {
+            buildResult(data.result)
+          } else {
+            qs('.request').classList.add('request--hide')
+            qs('.popup').classList.remove('popup--hide')
+            qs('body').classList.add('body--fail')
+            changeTextNode(qs('.popup'), '에러: ' + data.err)
+            return
+          }
+          qs('.request').classList.add('request--hide')
+          qs('.result').classList.remove('result--hide')
+      	} else {
+      		console.log('error: ' + xhr.status); // 요청 도중 에러 발생
+      	}
+      }
+    }
+
+    window.addEventListener('load', function () {
+      qs('.form').addEventListener('submit', function (event) {
+        event.preventDefault()
+        formSubmit()
+        return false
+      })
+    })
+    </script>
+  </head>
+  <body>
+    <div class='request'>
+      <form class='form'>
+        <p class='request__title'>Simple SEO Checker</p>
+        <input class='form__url' type='text' name='url' placeholder='https://example.com/' />
+        <input class='form__submit' type='submit' value='제출' />
+      </form>
+    </div>
+    <div class='result result--hide'>
+      <div class='result__list'></div>
+    </div>
+    <div class='popup popup--hide'></div>
+  </body>
+</html>

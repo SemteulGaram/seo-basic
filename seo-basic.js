@@ -2,7 +2,7 @@ const path = require('path')
 
 const Koa = require('koa')
 const KoaLogger = require('koa-logger')
-const KoaStatic = require('Koa-static')
+const KoaStatic = require('koa-static')
 const KoaBody = require('koa-body')
 const KoaRouter = require('koa-router')
 const requestPromise = require('request-promise-native')
